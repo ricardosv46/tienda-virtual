@@ -25,12 +25,12 @@ const Input = ({ label, icon: Icon, rightElement, ...props }: Props) => {
 
   return (
     <div className={props.className}>
-      <div className="relative w-full bg-opacity-50 rounded-md shadow bg-slate-200 h-14 dark:bg-slate-700">
+      <div className="relative w-full bg-opacity-50 rounded-lg shadow bg-slate-200 h-14 dark:bg-slate-700 ">
         <input
           {...props}
           id={`input-${uid}`}
           value={value}
-          autoComplete="off"
+          autoComplete="new-password"
           onBlur={props?.onBlur}
           onChange={props?.onChange ?? handleChange}
           type={props.type === 'password' ? (show ? 'text' : 'password') : props.type}

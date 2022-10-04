@@ -6,9 +6,12 @@ import NextLink from 'next/link'
 import ToggleTheme from '../../shared/ToggleTheme'
 import Container from '../Container'
 import { MdShoppingCart } from 'react-icons/md'
+import { BsApple } from 'react-icons/bs'
 import { IconUser } from '@icons'
 import SidebarCart from '@components/shared/SidebarCart'
 import Modal from '@components/shared/Modal'
+import { FaHeart } from 'react-icons/fa'
+import Input from '@components/shared/Input'
 
 const Navbar = () => {
   const { isOpen, onOpen, onClose, onToggle } = useToggle()
@@ -28,10 +31,22 @@ const Navbar = () => {
 
   return (
     <header className="relative shadow bg-primary-500 dark:bg-red-500">
-      <Container className="grid items-center grid-cols-2 py-2 md:grid-cols-1">
-        <BtnBurger isOpen={isOpenMenu} setIsOpen={onToggleMenu} />
+      <Container className="grid items-center grid-cols-2 py-2 ">
+        <div className="flex gap-5">
+          <BtnBurger isOpen={isOpenMenu} setIsOpen={onToggleMenu} />
+          <button className="text-white btn-icon btn-ghost-primary">
+            <BsApple className="w-4 h-4" />
+          </button>
+        </div>
+
         <nav className="flex justify-end gap-5 ">
           <ToggleTheme className="text-white" />
+          <button className="text-white btn-icon btn-ghost-primary">
+            <FaHeart className="w-4 h-4" />
+          </button>
+          {/* <button onClick={onToggle} className="text-white btn-icon btn-ghost-primary">
+            <AiOutlineHeart className="w-4 h-4" />
+          </button> */}
 
           <div className="relative">
             <button onClick={onToggle} className="text-white btn-icon btn-ghost-primary">
