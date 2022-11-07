@@ -1,0 +1,12 @@
+query GetAllCategorys($numberPage: Float!, $page: Float!) {
+  getAllCategorys(numberPage: $numberPage, page: $page) {
+    data {
+      id
+      name
+      description
+      condition
+      image
+    }
+    total
+  }
+}

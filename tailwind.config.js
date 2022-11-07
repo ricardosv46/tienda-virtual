@@ -11,10 +11,6 @@ module.exports = {
   theme: {
     extend: {
       colors: { ...themes },
-      fontFamily: {
-        sans: `"DM Sans", ${defaultTheme.fontFamily.sans.join(',')}`,
-        mono: `"IBM Plex Mono", ${defaultTheme.fontFamily.mono.join(',')}`
-      },
       spacing: {
         13: '3.25rem',
         15: '3.75rem',

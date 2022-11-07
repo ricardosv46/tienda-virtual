@@ -1,0 +1,10 @@
+overwrite: true
+schema: 'https://tienda-virtual-backend-production.up.railway.app/graphql'
+# schema: 'http://localhost:4000/graphql'
+documents: 'src/**/*.graphql'
+generates:
+  src/generated/graphql.tsx:
+    plugins:
+      - 'typescript'
+      - 'typescript-operations'
+      - 'typescript-react-apollo'

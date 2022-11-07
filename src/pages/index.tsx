@@ -1,7 +1,7 @@
 import Container from '@components/layout/Container'
 import Input from '@components/shared/Input'
-import ProductCart from '@components/shared/ProductCart'
 import Select from '@components/shared/Select'
+
 import type { NextPage } from 'next'
 
 const Home: NextPage = () => {

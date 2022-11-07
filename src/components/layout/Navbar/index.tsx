@@ -31,15 +31,15 @@ const Navbar = () => {
 
   return (
     <header className="relative shadow bg-primary-500 dark:bg-red-500">
-      <Container className="grid items-center grid-cols-2 py-2 ">
-        <div className="flex gap-5">
+      <Container className="grid items-center grid-cols-4 py-2 ">
+        <div className="flex items-center gap-5">
           <BtnBurger isOpen={isOpenMenu} setIsOpen={onToggleMenu} />
           <button className="text-white btn-icon btn-ghost-primary">
             <BsApple className="w-4 h-4" />
           </button>
         </div>
 
-        <nav className="flex justify-end gap-5 ">
+        <nav className="flex justify-end col-span-3 gap-5">
           <ToggleTheme className="text-white" />
           <button className="text-white btn-icon btn-ghost-primary">
             <FaHeart className="w-4 h-4" />
@@ -90,7 +90,7 @@ const Navbar = () => {
 
       <SidebarCart isOpen={isOpenCart} onClose={onCloseCart} />
 
-      {isOpen && <ModalLogin isOpen={isOpen} onClose={onClose} />}
+      <ModalLogin isOpen={isOpen} onClose={onClose} />
     </header>
   )
 }
