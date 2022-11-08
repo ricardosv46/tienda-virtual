@@ -4,15 +4,39 @@ import { loginValidation } from '@validation/loginValidation'
 import Modal from '.'
 import Input from '../Input'
 import { useCallback } from 'react'
+import { loginAction } from '@store/slices/authslice'
+import { useDispatch } from '@hooks/reduxhooks'
+import { useRouter } from 'next/router'
+import { Toast } from 'src/utils/Toast'
+import { useLogin } from '@services/useLogin'
 
 const ModalLogin = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) => {
   const { values, setField, clearErrors, clear, ...form } = useForm({
     initialValues: { email: '', password: '', nombres: '', apellidos: '', type: 'login' },
     validate: loginValidation
   })
+  const dispatch = useDispatch()
+  const { login, loading } = useLogin()
 
-  const handleSubmit = async () => {
-    console.log(values)
+  const router = useRouter()
+
+  const handleSubmit = () => {
+    login({ email: values.email, password: values.password }).then((res) => {
+      if (res.ok) {
+        onClose()
+
+        localStorage.setItem('token', res.data?.token!)
+
+        dispatch(loginAction(res?.data!))
+
+        Toast({ type: 'success', message: 'Correcto' })
+
+        if (res.data.rol === 'admin') {
+          router.push('/admin')
+        }
+      }
+      Toast({ type: 'error', message: res.error! })
+    })
   }
 
   const type = useCallback(
@@ -47,7 +71,7 @@ const ModalLogin = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void 
         {type('login') || type('register') ? (
           <Input type="password" label="Password" {...form.inputProps('password')} />
         ) : null}
-        <button type="submit" className="btn btn-solid-primary">
+        <button type="submit" className="btn btn-solid-primary" disabled={loading}>
           {type('login')
             ? 'Iniciar sesión'
             : type('register')

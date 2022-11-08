@@ -8,27 +8,42 @@ import { ToggleSwitch } from '@components/shared/ToggleSwitch/ToggleSwitch'
 import useToggle from '@hooks/useToggle'
 import { IconEdit, IconTrash } from '@icons'
 import { useCategoy } from '@services/useCategoy'
-import { useRouter } from 'next/router'
+import Link from 'next/link'
 import React, { useState } from 'react'
 import { FaPlus } from 'react-icons/fa'
 import { Toast } from 'src/utils/Toast'
 
 const Category = () => {
-  const { dataCategory, loading, deleteCategory, loadingDelete } = useCategoy({
+  const {
+    dataCategory,
+    loading,
+    deleteCategory,
+    loadingDelete,
+    updateCategoryCondition,
+    loadingUpdateCondition
+  } = useCategoy({
     page: 1,
     numberPage: 10
   })
   const { isOpen, onOpen, onClose } = useToggle()
   const [selectId, setSelectId] = useState<number | null>(null)
 
-  const router = useRouter()
-
   const handleDelete = () => {
-    deleteCategory({ deleteCategoryId: selectId! }).then((res) => {
+    deleteCategory({ id: selectId! }).then((res) => {
       if (res.ok) {
         Toast({ type: 'success', message: 'Eliminado correctamente' })
       } else {
         Toast({ type: 'error', message: 'No se pudo eliminar' })
+      }
+    })
+  }
+
+  const handleUpdateCondition = ({ id, condition }: { id: number; condition: boolean }) => {
+    updateCategoryCondition({ id, condition }).then((res) => {
+      if (res.ok) {
+        Toast({ type: 'success', message: 'Actualizado correctamente' })
+      } else {
+        Toast({ type: 'error', message: 'No se pudo actualizar' })
       }
     })
   }
@@ -38,12 +53,12 @@ const Category = () => {
       title="Categoría Blogs"
       desc="Desde aqui podras visualizar todas las categorías de los blogs"
       button={
-        <button
-          onClick={() => router.push('category/create')}
-          className="self-end w-full mb-3 btn btn-solid-primary sm:w-max">
-          <FaPlus />
-          Crear Categoría
-        </button>
+        <Link href="category/create">
+          <button type="button" className="self-end w-full mb-3 btn btn-solid-primary sm:w-max">
+            <FaPlus />
+            Crear Categoría
+          </button>
+        </Link>
       }>
       <Show
         condition={loading}
@@ -73,7 +88,13 @@ const Category = () => {
 
                 <td>
                   <div className="flex justify-center ">
-                    <ToggleSwitch onClick={() => {}} value={item.condition} />
+                    <ToggleSwitch
+                      disabled={loadingUpdateCondition}
+                      onClick={() => {
+                        handleUpdateCondition({ id: item?.id, condition: !item?.condition })
+                      }}
+                      value={item?.condition}
+                    />
                   </div>
                 </td>
 

@@ -1,3 +1,4 @@
+import useRefreshToken from '@hooks/useRefreshToken'
 import { Html, Head, Main, NextScript } from 'next/document'
 
 const Document = () => {

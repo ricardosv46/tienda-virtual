@@ -1,5 +1,5 @@
-mutation DeleteCategory($deleteCategoryId: Float!) {
-  deleteCategory(id: $deleteCategoryId) {
+mutation DeleteCategory($id: Float!) {
+  deleteCategory(id: $id) {
     success
     message
   }

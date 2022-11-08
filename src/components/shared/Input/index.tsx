@@ -60,6 +60,7 @@ const Input = ({ label, icon: Icon, rightElement, ...props }: Props) => {
         {/* eslint-disable */}
         {props.type === 'password' ? (
           <button
+            type="button"
             onClick={() => setShow((prev) => !prev)}
             className="btn-icon btn-ghost-primary absolute right-3 top-[10px]">
             {show ? <FaEyeSlash /> : <FaEye />}
@@ -68,6 +69,7 @@ const Input = ({ label, icon: Icon, rightElement, ...props }: Props) => {
 
         {typeof Icon === 'function' ? (
           <button
+            type="button"
             onClick={() => setShow((prev) => !prev)}
             className="btn-icon btn-ghost-primary absolute right-3 top-[10px]">
             {<Icon />}

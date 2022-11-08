@@ -11,3 +11,7 @@ body.dark {
     @apply w-full px-8 mx-auto max-w-7xl;
   }
 }
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}

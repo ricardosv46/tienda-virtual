@@ -1,3 +1,4 @@
+import LayoutAdmin from '@components/layout/LayoutAdmin/LayoutAdmin'
 import React from 'react'
 
 const Edit = () => {

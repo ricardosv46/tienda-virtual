@@ -4,12 +4,16 @@ interface Props {
   children: React.ReactNode
   bgColor?: string
   className?: string
+  container?: boolean
 }
 
-const Container = ({ children, bgColor = '', className = '' }: Props) => {
+const Container = ({ children, bgColor = '', className = '', container = true }: Props) => {
   return (
     <section className={bgColor}>
-      <div className={`mx-auto my-0 w-[90%] max-w-[1200px] ${className}`}>{children}</div>
+      <div
+        className={`mx-auto my-0 ${container ? 'w-[90%] max-w-[1200px]' : 'px-10'}  ${className}`}>
+        {children}
+      </div>
     </section>
   )
 }

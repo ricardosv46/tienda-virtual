@@ -13,6 +13,7 @@ interface Props {
 
 const PlantillaAdmin = ({ children, title, button, desc, goback = false }: Props) => {
   const router = useRouter()
+
   return (
     <div className="flex flex-col flex-1 p-10 ">
       <div className="flex flex-col items-start gap-5 mb-5 sm:flex-row">

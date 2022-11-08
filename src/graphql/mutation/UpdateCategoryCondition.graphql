@@ -1,0 +1,6 @@
+mutation UpdateCategoryCondition($id: Float!, $condition: Boolean!) {
+  updateCategoryCondition(id: $id, condition: $condition) {
+    success
+    message
+  }
+}
