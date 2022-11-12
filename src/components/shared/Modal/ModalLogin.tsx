@@ -32,7 +32,7 @@ const ModalLogin = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void 
 
         Toast({ type: 'success', message: 'Correcto' })
 
-        if (res.data.rol === 'admin') {
+        if (res?.data?.rol === 'admin') {
           router.push('/admin')
         }
       }

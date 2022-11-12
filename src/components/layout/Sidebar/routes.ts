@@ -27,8 +27,8 @@ export const homeRoutes: SidebarLinkType[] = [
 ]
 
 export const getRoutes = () => {
-  let subRoutes = []
-  let mainRoutes = []
+  let subRoutes = [{}]
+  let mainRoutes = [{}]
 
   for (const { subMenu, ...mainRoute } of homeRoutes) {
     mainRoutes = [...mainRoutes, mainRoute]

@@ -27,7 +27,7 @@ const LayoutContainer = ({ children }: { children: ReactNode }) => {
 
   return (
     <>
-      {isAuth && user.rol === 'admin' ? (
+      {isAuth && user?.rol === 'admin' ? (
         <LayoutAdmin>{children}</LayoutAdmin>
       ) : (
         <LayoutHome>{children}</LayoutHome>
