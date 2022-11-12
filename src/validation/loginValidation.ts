@@ -51,10 +51,3 @@ export const loginValidation = ({ email, password, type, apellidos, nombres }: L
 
   return errors
 }
-
-// const type = useCallback(
-//   (type: string) => {
-//     return values.type === type
-//   },
-//   [values.type]
-// )

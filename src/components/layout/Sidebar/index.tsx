@@ -1,16 +1,15 @@
 import useToggle from '@hooks/useToggle'
-import { FaMinus, FaPlus } from 'react-icons/fa'
 import { IoClose } from 'react-icons/io5'
 import { AiFillHome } from 'react-icons/ai'
 import { BiLogOutCircle } from 'react-icons/bi'
 import { BsApple } from 'react-icons/bs'
-
 import SidebarLink from './SidebarLink'
 import styles from './sidebar.module.css'
 import { classNames } from '@utils'
 import { homeRoutes } from './routes'
 import { useSelector } from '@hooks/reduxhooks'
 import ToggleTheme from '@components/shared/ToggleTheme'
+import { IconMinus, IconPlus } from '@icons'
 interface Props {
   onClose: () => void
   onToggle: () => void
@@ -39,8 +38,8 @@ const Sidebar = ({ onClose, mobile = false }: Props) => {
             ) : (
               <div>
                 <ToggleTheme className={styles.oculto} />
-                <button className={`btn-icon btn-ghost-gray `} onClick={onToggle}>
-                  {isOpen ? <FaPlus /> : <FaMinus />}
+                <button className={`btn-icon btn-ghost-primary `} onClick={onToggle}>
+                  {isOpen ? <IconPlus /> : <IconMinus />}
                 </button>
               </div>
             )}

@@ -25,7 +25,6 @@ function MyApp({ Component, pageProps }: AppProps) {
             draggable
             pauseOnHover
           />
-
           <LayoutContainer>
             <Component {...pageProps} />
           </LayoutContainer>

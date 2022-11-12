@@ -18,7 +18,7 @@ export const useLogin = () => {
       return { ok: true, data: res.data?.login }
     } catch (error: any) {
       console.log({ error })
-      return { ok: false, error: error.graphQLErrors[0].message }
+      return { ok: false, error: error?.graphQLErrors[0]?.message || 'Hubo un error' }
     }
   }
 

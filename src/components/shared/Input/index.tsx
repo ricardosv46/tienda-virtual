@@ -24,7 +24,7 @@ const Input = ({ label, icon: Icon, rightElement, ...props }: Props) => {
   const isValueEmpty = isEmpty((value as string) ?? '')
 
   return (
-    <div className={props.className}>
+    <div className={`w-full ${props.className}`}>
       <div className="relative w-full bg-opacity-50 rounded-lg shadow bg-slate-200 h-14 dark:bg-slate-700 ">
         <input
           {...props}

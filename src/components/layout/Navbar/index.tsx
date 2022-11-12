@@ -2,7 +2,6 @@ import BtnBurger from '@components/shared/btnBurger'
 import ModalLogin from '@components/shared/Modal/ModalLogin'
 import useToggle from '@hooks/useToggle'
 import { classNames } from '@utils'
-import NextLink from 'next/link'
 import ToggleTheme from '../../shared/ToggleTheme'
 import Container from '../Container'
 import { MdShoppingCart } from 'react-icons/md'
@@ -11,8 +10,6 @@ import { IconUser } from '@icons'
 import SidebarCart from '@components/shared/SidebarCart'
 import Modal from '@components/shared/Modal'
 import { FaHeart } from 'react-icons/fa'
-import Input from '@components/shared/Input'
-import Link from 'next/link'
 import { useDispatch, useSelector } from '@hooks/reduxhooks'
 import { logoutAction } from '@store/slices/authslice'
 
@@ -22,7 +19,6 @@ const Navbar = ({ container }: { container?: boolean }) => {
   const { isOpen, onClose, onToggle } = useToggle()
   const { isOpen: isOpenAuth, onOpen: onOpenAuth, onClose: onCloseAuth } = useToggle()
   const { isOpen: isOpenCart, onClose: onCloseCart, onToggle: onToggleCart } = useToggle()
-
   const { isOpen: isOpenMenu, onClose: onCloseMenu, onToggle: onToggleMenu } = useToggle()
 
   return (
@@ -48,14 +44,16 @@ const Navbar = ({ container }: { container?: boolean }) => {
             <button
               onClick={() => {
                 onToggle()
-                onOpenAuth()
+                if (!isOpenAuth) {
+                  onOpenAuth()
+                }
               }}
               className="text-white btn-icon btn-ghost-primary">
               <IconUser className="w-4 h-4" />
             </button>
             {isAuth ? (
               <>
-                {isOpenAuth ? (
+                {isOpen ? (
                   <div className="absolute z-50 p-5 rounded-lg bg-slate-100 w-60 top-16 -right-2">
                     <div className="  justify-end  -left-4 w-full absolute -top-2.5  z-50 flex">
                       <div className="w-5 h-5 rotate-45 bg-slate-100"></div>
@@ -63,13 +61,13 @@ const Navbar = ({ container }: { container?: boolean }) => {
 
                     <button
                       className="w-full py-3 font-bold text-white rounded-lg bg-primary-500"
-                      onClick={onCloseAuth}>
+                      onClick={onClose}>
                       Ver Perfil
                     </button>
                     <button
                       className="w-full py-3 mt-1 font-bold text-white bg-red-500 rounded-lg"
                       onClick={() => {
-                        onCloseAuth()
+                        onClose()
                         dispatch(logoutAction())
                       }}>
                       Cerrar Sesión
@@ -98,7 +96,7 @@ const Navbar = ({ container }: { container?: boolean }) => {
 
       <SidebarCart isOpen={isOpenCart} onClose={onCloseCart} />
 
-      {!isAuth && <ModalLogin isOpen={isOpen} onClose={onClose} />}
+      {!isAuth && <ModalLogin isOpen={isOpenAuth} onClose={onCloseAuth} />}
     </header>
   )
 }

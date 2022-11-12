@@ -9,13 +9,14 @@ import useToggle from '@hooks/useToggle'
 import { IconEdit, IconTrash } from '@icons'
 import { useCategoy } from '@services/useCategoy'
 import Link from 'next/link'
+import { useRouter } from 'next/router'
 import React, { useState } from 'react'
 import { FaPlus } from 'react-icons/fa'
 import { Toast } from 'src/utils/Toast'
 
 const Category = () => {
   const {
-    dataCategory,
+    dataAllCategory,
     loading,
     deleteCategory,
     loadingDelete,
@@ -25,6 +26,7 @@ const Category = () => {
     page: 1,
     numberPage: 10
   })
+  const router = useRouter()
   const { isOpen, onOpen, onClose } = useToggle()
   const [selectId, setSelectId] = useState<number | null>(null)
 
@@ -75,7 +77,7 @@ const Category = () => {
             </tr>
           </thead>
           <tbody>
-            {dataCategory.map((item) => (
+            {dataAllCategory?.map((item) => (
               <tr
                 key={item.id}
                 className="dark:bg-transparent dark:text-slate-50 dark:hover:bg-slate-900 dark:border-b-slate-700">
@@ -102,8 +104,7 @@ const Category = () => {
                   <div className="flex justify-center gap-x-3">
                     <button
                       className="btn-icon btn-ghost-primary"
-                      // onClick={() => router(`edit-blog-category/${item.slug}`)}
-                    >
+                      onClick={() => router.push(`category/${item?.id}`)}>
                       <IconEdit />
                     </button>
 

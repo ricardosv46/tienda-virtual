@@ -1,34 +1,43 @@
 import Input from '@components/shared/Input'
+import InputImage from '@components/shared/Input/InputImage'
 import PlantillaAdmin from '@components/shared/PlantillaAdmin/PlantillaAdmin'
 import Spinner from '@components/shared/Spinner/Spinner'
 import useForm from '@hooks/useForm'
 import { useCategoy } from '@services/useCategoy'
+import { categoryValidation } from '@validation/categoryValidation'
+
+import { useRouter } from 'next/router'
 import React, { useState } from 'react'
 import { Toast } from 'src/utils/Toast'
 
 const Create = () => {
   const { createCategory, loadingCreate } = useCategoy({})
-  const [newImage, setnewImage] = useState(null)
 
-  const { values, setField, clearErrors, clear, ...form } = useForm({
+  const { values, setField, clearErrors, clear, errors, touched, ...form } = useForm({
     initialValues: {
       description: '',
-      name: ''
-    }
+      name: '',
+      image: null
+    },
+    validate: categoryValidation
   })
+
+  const router = useRouter()
 
   const handleSubmit = async () => {
     createCategory({
-      ...values,
-      image: newImage
+      ...values
     }).then((res) => {
       if (res?.ok) {
         Toast({ type: 'success', message: 'Creado correctamente' })
+        router.push('/admin/category')
       } else {
         Toast({ type: 'error', message: 'No se puedo crear' })
       }
     })
   }
+
+  console.log('values', { ...values })
 
   return (
     <PlantillaAdmin title="Crear Categoría" goback>
@@ -37,19 +46,20 @@ const Create = () => {
       </div>
       <form
         onSubmit={form.onSubmit(handleSubmit)}
-        className="flex flex-col w-full max-w-3xl gap-8 mx-auto mt-10 ">
+        className="flex flex-col w-full max-w-3xl mx-auto mt-10 gap-7 md:grid sm:grid-cols-2 ">
         <Input type="text" label="Nombre" {...form.inputProps('name')} />
 
         <Input type="text" label="Descripción" {...form.inputProps('description')} />
 
-        <input
-          type="file"
-          name=""
-          id=""
-          onChange={(e: any) => {
-            setnewImage(e.target.files[0])
-          }}
-        />
+        <div className="flex w-full col-span-2 mx-auto md:w-1/2">
+          <InputImage
+            label="Imagen"
+            value={values.image}
+            onChange={(value) => setField('image', value)}
+            error={errors.image}
+          />
+        </div>
+
         <div className="flex items-center justify-center col-span-2">
           <button
             type="submit"

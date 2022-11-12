@@ -33,7 +33,6 @@ export type CategoryProductCreateInput = {
 };
 
 export type CategoryProductUpdateInput = {
-  condition: Scalars['Boolean'];
   description: Scalars['String'];
   id: Scalars['Float'];
   image?: InputMaybe<Scalars['Upload']>;
@@ -325,6 +324,13 @@ export type RefreshTokenMutationVariables = Exact<{ [key: string]: never; }>;
 
 export type RefreshTokenMutation = { __typename?: 'Mutation', refreshToken: { __typename?: 'LoginResponse', id: number, name: string, lastname: string, username: string, email: string, dni: string, celular: string, gender: string, image: string, cloudId: string, condition: boolean, token: string, rol: string } };
 
+export type UpdateCategoryMutationVariables = Exact<{
+  input: CategoryProductUpdateInput;
+}>;
+
+
+export type UpdateCategoryMutation = { __typename?: 'Mutation', updateCategory: { __typename?: 'Response', success: boolean, message: string } };
+
 export type UpdateCategoryConditionMutationVariables = Exact<{
   id: Scalars['Float'];
   condition: Scalars['Boolean'];
@@ -340,6 +346,13 @@ export type GetAllCategorysQueryVariables = Exact<{
 
 
 export type GetAllCategorysQuery = { __typename?: 'Query', getAllCategorys: { __typename?: 'CategoryResponse', total: string, data: Array<{ __typename?: 'CategoryProduct', id: number, name: string, description: string, condition: boolean, image: string }> } };
+
+export type GetCategoryIdQueryVariables = Exact<{
+  id: Scalars['Float'];
+}>;
+
+
+export type GetCategoryIdQuery = { __typename?: 'Query', getCategoryId: { __typename?: 'CategoryProduct', id: number, name: string, description: string, condition: boolean, image: string, cloudId: string } };
 
 
 export const CreateCategoryDocument = gql`
@@ -502,6 +515,40 @@ export function useRefreshTokenMutation(baseOptions?: Apollo.MutationHookOptions
 export type RefreshTokenMutationHookResult = ReturnType<typeof useRefreshTokenMutation>;
 export type RefreshTokenMutationResult = Apollo.MutationResult<RefreshTokenMutation>;
 export type RefreshTokenMutationOptions = Apollo.BaseMutationOptions<RefreshTokenMutation, RefreshTokenMutationVariables>;
+export const UpdateCategoryDocument = gql`
+    mutation UpdateCategory($input: CategoryProductUpdateInput!) {
+  updateCategory(input: $input) {
+    success
+    message
+  }
+}
+    `;
+export type UpdateCategoryMutationFn = Apollo.MutationFunction<UpdateCategoryMutation, UpdateCategoryMutationVariables>;
+
+/**
+ * __useUpdateCategoryMutation__
+ *
+ * To run a mutation, you first call `useUpdateCategoryMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateCategoryMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateCategoryMutation, { data, loading, error }] = useUpdateCategoryMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useUpdateCategoryMutation(baseOptions?: Apollo.MutationHookOptions<UpdateCategoryMutation, UpdateCategoryMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateCategoryMutation, UpdateCategoryMutationVariables>(UpdateCategoryDocument, options);
+      }
+export type UpdateCategoryMutationHookResult = ReturnType<typeof useUpdateCategoryMutation>;
+export type UpdateCategoryMutationResult = Apollo.MutationResult<UpdateCategoryMutation>;
+export type UpdateCategoryMutationOptions = Apollo.BaseMutationOptions<UpdateCategoryMutation, UpdateCategoryMutationVariables>;
 export const UpdateCategoryConditionDocument = gql`
     mutation UpdateCategoryCondition($id: Float!, $condition: Boolean!) {
   updateCategoryCondition(id: $id, condition: $condition) {
@@ -580,3 +627,43 @@ export function useGetAllCategorysLazyQuery(baseOptions?: Apollo.LazyQueryHookOp
 export type GetAllCategorysQueryHookResult = ReturnType<typeof useGetAllCategorysQuery>;
 export type GetAllCategorysLazyQueryHookResult = ReturnType<typeof useGetAllCategorysLazyQuery>;
 export type GetAllCategorysQueryResult = Apollo.QueryResult<GetAllCategorysQuery, GetAllCategorysQueryVariables>;
+export const GetCategoryIdDocument = gql`
+    query GetCategoryId($id: Float!) {
+  getCategoryId(id: $id) {
+    id
+    name
+    description
+    condition
+    image
+    cloudId
+  }
+}
+    `;
+
+/**
+ * __useGetCategoryIdQuery__
+ *
+ * To run a query within a React component, call `useGetCategoryIdQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetCategoryIdQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetCategoryIdQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetCategoryIdQuery(baseOptions: Apollo.QueryHookOptions<GetCategoryIdQuery, GetCategoryIdQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetCategoryIdQuery, GetCategoryIdQueryVariables>(GetCategoryIdDocument, options);
+      }
+export function useGetCategoryIdLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetCategoryIdQuery, GetCategoryIdQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetCategoryIdQuery, GetCategoryIdQueryVariables>(GetCategoryIdDocument, options);
+        }
+export type GetCategoryIdQueryHookResult = ReturnType<typeof useGetCategoryIdQuery>;
+export type GetCategoryIdLazyQueryHookResult = ReturnType<typeof useGetCategoryIdLazyQuery>;
+export type GetCategoryIdQueryResult = Apollo.QueryResult<GetCategoryIdQuery, GetCategoryIdQueryVariables>;

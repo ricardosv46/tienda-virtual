@@ -1,16 +1,22 @@
 import Spinner from '@components/shared/Spinner/Spinner'
 import { useSelector } from '@hooks/reduxhooks'
 import useRefreshToken from '@hooks/useRefreshToken'
-import React, { ReactNode } from 'react'
+import { useRouter } from 'next/router'
+import React, { ReactNode, useEffect } from 'react'
+import { useStoreContext } from 'src/context/StoreState'
 import LayoutAdmin from '../LayoutAdmin/LayoutAdmin'
 import LayoutHome from '../LayoutHome/LayoutHome'
 
 const LayoutContainer = ({ children }: { children: ReactNode }) => {
   const { isAuth, user } = useSelector((state) => state.auth)
+  const router = useRouter()
+  const { loading } = useStoreContext()
 
-  const { loading } = useRefreshToken()
-
-  console.log({ loading, isAuth, user })
+  useEffect(() => {
+    if (user?.rol !== 'admin') {
+      router.push('/')
+    }
+  }, [])
 
   if (loading)
     return (

@@ -1,0 +1,6 @@
+mutation UpdateCategory($input: CategoryProductUpdateInput!) {
+  updateCategory(input: $input) {
+    success
+    message
+  }
+}

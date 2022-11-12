@@ -49,6 +49,18 @@ module.exports = plugin(function ({ addComponents, theme }) {
       lineHeight: '44px',
       fontWeight: '600',
       letterSpacing: '-0.4px'
+    },
+    '.title-9': {
+      fontSize: '24px',
+      lineHeight: '40px',
+      fontWeight: '600',
+      letterSpacing: '-0.4px'
+    },
+    '.title-10': {
+      fontSize: '20px',
+      lineHeight: '40px',
+      fontWeight: '600',
+      letterSpacing: '-0.4px'
     }
 
   })

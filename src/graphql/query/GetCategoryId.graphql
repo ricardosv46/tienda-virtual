@@ -1,0 +1,10 @@
+query GetCategoryId($id: Float!) {
+  getCategoryId(id: $id) {
+    id
+    name
+    description
+    condition
+    image
+    cloudId
+  }
+}

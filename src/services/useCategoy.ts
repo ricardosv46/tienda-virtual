@@ -2,23 +2,35 @@ import {
   useCreateCategoryMutation,
   useDeleteCategoryMutation,
   useGetAllCategorysQuery,
-  useUpdateCategoryConditionMutation
+  useGetCategoryIdQuery,
+  useUpdateCategoryConditionMutation,
+  useUpdateCategoryMutation
 } from '@generated/graphql'
 
 interface IProps {
   page?: number
   numberPage?: number
+  id?: number
 }
-
 interface ICreateCategory {
   image: any
   name: string
   description: string
 }
+interface IUpdateCategory {
+  description: string
+  id: number
+  image: any
+  name: string
+}
 
 // Obtenemos todas las categorias
-export const useCategoy = ({ page = 1, numberPage = 10 }: IProps) => {
-  const { data, loading, refetch } = useGetAllCategorysQuery({
+export const useCategoy = ({ page = 1, numberPage = 10, id = 0 }: IProps) => {
+  const {
+    data: dataAll,
+    loading,
+    refetch
+  } = useGetAllCategorysQuery({
     fetchPolicy: 'network-only',
     variables: {
       page,
@@ -26,7 +38,15 @@ export const useCategoy = ({ page = 1, numberPage = 10 }: IProps) => {
     }
   })
 
-  const dataCategory = data?.getAllCategorys?.data ?? []
+  const { data: dataId, loading: loadingCategoryId } = useGetCategoryIdQuery({
+    fetchPolicy: 'network-only',
+    variables: {
+      id
+    }
+  })
+
+  const dataAllCategory = dataAll?.getAllCategorys?.data ?? []
+  const dataCategoryId = dataId?.getCategoryId
 
   const [CreateCategory, { loading: loadingCreate }] = useCreateCategoryMutation()
 
@@ -44,23 +64,7 @@ export const useCategoy = ({ page = 1, numberPage = 10 }: IProps) => {
       refetch()
       return { ok: true }
     } catch (error: any) {
-      return { ok: false, error: 'Error no se pudo crear la categoria' }
-    }
-  }
-
-  const [DeleteCategory, { loading: loadingDelete }] = useDeleteCategoryMutation()
-
-  const deleteCategory = async ({ id }: { id: number }) => {
-    try {
-      const res = await DeleteCategory({
-        variables: {
-          id
-        }
-      })
-      refetch()
-      return { ok: true }
-    } catch (error: any) {
-      return { ok: false, error: 'Error no se pudo eliminar la categoria' }
+      return { ok: false, error: error?.graphQLErrors[0]?.message || 'Hubo un error' }
     }
   }
 
@@ -78,18 +82,59 @@ export const useCategoy = ({ page = 1, numberPage = 10 }: IProps) => {
       refetch()
       return { ok: true }
     } catch (error: any) {
-      return { ok: false, error: 'Error no se pudo eliminar la categoria' }
+      return { ok: false, error: error?.graphQLErrors[0]?.message || 'Hubo un error' }
+    }
+  }
+
+  const [UpdateCategory, { loading: loadingUpdate }] = useUpdateCategoryMutation()
+
+  const updateCategory = async ({ image, name, description, id }: IUpdateCategory) => {
+    try {
+      const res = await UpdateCategory({
+        variables: {
+          input: {
+            id,
+            image,
+            name,
+            description
+          }
+        }
+      })
+      refetch()
+      return { ok: true }
+    } catch (error: any) {
+      return { ok: false, error: error?.graphQLErrors[0]?.message || 'Hubo un error' }
+    }
+  }
+
+  const [DeleteCategory, { loading: loadingDelete }] = useDeleteCategoryMutation()
+
+  const deleteCategory = async ({ id }: { id: number }) => {
+    try {
+      const res = await DeleteCategory({
+        variables: {
+          id
+        }
+      })
+      refetch()
+      return { ok: true }
+    } catch (error: any) {
+      return { ok: false, error: error?.graphQLErrors[0]?.message || 'Hubo un error' }
     }
   }
 
   return {
     loading,
-    dataCategory,
+    dataAllCategory,
     createCategory,
     loadingCreate,
     deleteCategory,
     loadingDelete,
     updateCategoryCondition,
-    loadingUpdateCondition
+    loadingUpdateCondition,
+    loadingCategoryId,
+    dataCategoryId,
+    updateCategory,
+    loadingUpdate
   }
 }

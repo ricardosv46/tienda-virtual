@@ -1,8 +1,8 @@
 import LayoutAdmin from '@components/layout/LayoutAdmin/LayoutAdmin'
+import LayoutContainer from '@components/layout/LayoutContainer/LayoutContainer'
 import React from 'react'
 
 const Admin = () => {
-  console.log({ route: 'protect' })
   return <div>Admin</div>
 }
 

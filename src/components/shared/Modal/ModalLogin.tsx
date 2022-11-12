@@ -9,6 +9,7 @@ import { useDispatch } from '@hooks/reduxhooks'
 import { useRouter } from 'next/router'
 import { Toast } from 'src/utils/Toast'
 import { useLogin } from '@services/useLogin'
+import Spinner from '../Spinner/Spinner'
 
 const ModalLogin = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) => {
   const { values, setField, clearErrors, clear, ...form } = useForm({
@@ -50,7 +51,7 @@ const ModalLogin = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void 
     <Modal isOpen={isOpen} onClose={onClose}>
       <form
         onSubmit={form.onSubmit(handleSubmit)}
-        className="flex flex-col gap-5 p-5 bg-white rounded-lg w-96 ">
+        className="flex flex-col w-full gap-5 p-5 bg-white rounded-lg lg:w-96 ">
         <h1 className="text-2xl font-bold text-center text-primary-500">
           {type('login')
             ? 'Iniciar sesión'
@@ -77,7 +78,10 @@ const ModalLogin = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void 
             : type('register')
             ? 'Regístrate'
             : 'Recuperar Contraseña'}
+
+          {loading && <Spinner className="w-5 h-5" />}
         </button>
+
         <p className="">
           {type('login') ? 'Si no tienes una cuenta ' : 'Si ya tienes una cuenta '}
           <span
