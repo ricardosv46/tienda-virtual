@@ -65,9 +65,9 @@ const Edit = () => {
   }, [loadingCategoryId])
 
   return (
-    <PlantillaAdmin title="Editar Categoría" goback>
+    <PlantillaAdmin title="Editar Producto" goback>
       <div className="flex justify-center">
-        <h1 className="title-9 dark:text-slate-200">Editar Categoría</h1>
+        <h1 className="title-9 dark:text-slate-200">Editar Producto</h1>
       </div>
       <Show
         condition={loadingCategoryId}
@@ -94,7 +94,7 @@ const Edit = () => {
               type="submit"
               disabled={loadingCreate}
               className="w-full md:w-1/2 btn btn-solid-primary">
-              Actualizar Categoría
+              Actualizar Producto
               {loadingCreate && <Spinner className="w-5 h-5" />}
             </button>
           </div>

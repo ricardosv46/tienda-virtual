@@ -1,22 +1,35 @@
 import { FaChevronDown } from 'react-icons/fa'
 import { classNames, isEmpty } from '@utils'
-import { useState, ChangeEvent, SelectHTMLAttributes, useMemo } from 'react'
+import { useState, ChangeEvent, useEffect, useMemo, useRef } from 'react'
 import Input from '../Input'
 
+interface Data {
+  value: string
+  label: string
+}
+interface InnerData {
+  value: string
+  label: string | null
+}
+
+interface Props<T> {
+  options?: T[]
+  label?: string
+  error?: string
+  touched?: boolean
+  withFilter?: boolean
+  value?: string | number
+  dataExtractor?: { value: keyof T; label: keyof T }
+  onBlur?: () => void
+  onChange?: (data: Data) => void
+}
 interface OptionProps {
-  desc?: string
   label: string
   value: string
   onClick?: () => void
 }
 
-interface Props extends SelectHTMLAttributes<HTMLInputElement> {
-  label?: string
-  error?: string
-  options?: OptionProps[]
-}
-
-const Option = ({ label, desc, onClick }: OptionProps) => (
+const Option = ({ label, onClick }: OptionProps) => (
   <button
     onClick={onClick}
     className="w-full text-left border-b border-gray-100 rounded-t cursor-pointer hover:bg-primary-50">
@@ -24,50 +37,95 @@ const Option = ({ label, desc, onClick }: OptionProps) => (
       <div className="flex items-center w-full">
         <div className="mx-2 -mt-1">
           {label}
-          <div className="w-full -mt-1 text-xs font-normal text-gray-500 normal-case truncate">
-            {desc}
-          </div>
+          {/*<div className="w-full -mt-1 text-xs font-normal text-gray-500 normal-case truncate">
+            {value}
+          </div>*/}
         </div>
       </div>
     </div>
   </button>
 )
 
-const Select = ({ label, options, ...props }: Props) => {
+const Select = <T extends object>({
+  label,
+  options,
+  onBlur,
+  onChange,
+  withFilter,
+  dataExtractor,
+  error,
+  ...props
+}: Props<T>) => {
+  const inputRef = useRef<HTMLInputElement>(null)
   const [isOpen, setIsOpen] = useState(false)
-  const [innerValue, setInnerValue] = useState('')
+  const [isFiltering, setIsFiltering] = useState(false)
+  const [innerData, setInnerData] = useState<InnerData>({
+    value: '',
+    label: null
+  })
 
-  const error = props?.error ?? null
-  const value = props?.value ?? innerValue
+  const keyValue = dataExtractor ? dataExtractor.value : 'value'
+  const keyLabel = dataExtractor ? dataExtractor.label : 'label'
+
+  const innerValue = innerData.label ? innerData.label : innerData.value
+
+  useEffect(() => {
+    if (Array.isArray(options)) {
+      const i = options?.findIndex((o: any) => String(o[keyValue]) === String(props.value))
+      setInnerData({
+        label: i === -1 ? '' : (options as any)[i][keyLabel],
+        value: i === -1 ? '' : (options as any)[i][keyValue]
+      })
+    }
+  }, [options?.length && options, props.value])
 
   const filterOptions = useMemo(() => {
-    const _value = typeof value === 'string' ? value.toLowerCase() : ''
-    return options?.filter(({ label }) => {
-      return label.toLowerCase().includes(_value)
-    })
-  }, [value, options])
+    if (withFilter) {
+      const _label = typeof innerData.value === 'string' ? innerData.value.toLowerCase() : ''
+      return options?.filter((option) => {
+        return (option as any)[keyLabel].toLowerCase().includes(_label)
+      })
+    }
+
+    return options
+  }, [innerValue, options, withFilter])
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setIsOpen(!isEmpty(e.target.value))
-    setInnerValue(e.target.value)
+    const value = e.target.value
+
+    if (innerData.label !== null) {
+      onChange?.({ label: '', value: '' })
+    }
+    setInnerData({ label: null, value })
+    setIsOpen(!isEmpty(String(value)))
+    setIsFiltering(true)
   }
 
   const handleSelect = (data: OptionProps) => {
+    onChange?.(data)
+    setInnerData(data)
     setIsOpen(false)
-    setInnerValue(data.label)
+    setIsFiltering(false)
   }
 
   return (
     <div className="w-full">
       <div className="relative  bg-opacity-50 h-48px] rounded  w-full">
         <Input
+          disabled={!withFilter}
+          ref={inputRef}
           label={label}
-          error={error!}
           value={innerValue}
-          onChange={props?.onChange ?? handleChange}
+          error={error}
+          onBlur={onBlur}
+          onChange={handleChange}
           rightElement={
             <button
-              className="btn-icon btn-ghost-primary"
+              type="button"
+              className={classNames([
+                'btn-icon  ',
+                error?.length ? 'btn-ghost-red ' : 'btn-ghost-primary '
+              ])}
               onClick={() => setIsOpen((prev) => !prev)}>
               <FaChevronDown
                 className={classNames([isOpen ? 'rotate-180' : 'rotate-0', 'transition-transform'])}
@@ -82,13 +140,37 @@ const Select = ({ label, options, ...props }: Props) => {
             'absolute z-40 w-full overflow-y-auto bg-white rounded shadow top-[105%]'
           ])}>
           <div className="flex flex-col w-full">
-            {Array.isArray(filterOptions) &&
-              filterOptions.map((data) => (
-                <Option {...data} key={data.label} onClick={() => handleSelect(data)} />
-              ))}
+            {isOpen &&
+              isFiltering &&
+              filterOptions?.map((data) => {
+                const value = (data as any)[keyValue]
+                const label = (data as any)[keyLabel]
+                return (
+                  <Option
+                    key={value}
+                    label={label}
+                    value={value}
+                    onClick={() => handleSelect({ value, label })}
+                  />
+                )
+              })}
+
+            {isOpen &&
+              !isFiltering &&
+              options?.map((data) => {
+                const value = (data as any)[keyValue]
+                const label = (data as any)[keyLabel]
+                return (
+                  <Option
+                    key={value}
+                    label={label}
+                    value={value}
+                    onClick={() => handleSelect({ value, label })}
+                  />
+                )
+              })}
           </div>
         </div>
-        <p className="absolute text-sm text-red-500 -bottom-5">{error}</p>
       </div>
     </div>
   )

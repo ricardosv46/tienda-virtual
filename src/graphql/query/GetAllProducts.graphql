@@ -1,0 +1,17 @@
+query GetAllProducts($numberPage: Float!, $page: Float!) {
+  getAllProducts(numberPage: $numberPage, page: $page) {
+    data {
+      id
+      name
+      description
+      price
+      stock
+      image
+      cloudId
+      calification
+      brand
+      condition
+    }
+    total
+  }
+}

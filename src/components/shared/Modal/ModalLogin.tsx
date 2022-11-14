@@ -13,31 +13,56 @@ import Spinner from '../Spinner/Spinner'
 
 const ModalLogin = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) => {
   const { values, setField, clearErrors, clear, ...form } = useForm({
-    initialValues: { email: '', password: '', nombres: '', apellidos: '', type: 'login' },
+    initialValues: { email: '', password: '', name: '', lastname: '', type: 'login' },
     validate: loginValidation
   })
   const dispatch = useDispatch()
-  const { login, loading } = useLogin()
+  const { login, loading, register, loadingRegister, recoveryPassword, loadingRecoveryPassword } =
+    useLogin()
 
   const router = useRouter()
 
   const handleSubmit = () => {
-    login({ email: values.email, password: values.password }).then((res) => {
-      if (res.ok) {
-        onClose()
+    const { type: typeId, ...resValues } = values
 
-        localStorage.setItem('token', res.data?.token!)
+    if (type('login')) {
+      login({ email: values.email, password: values.password }).then((res) => {
+        if (res.ok) {
+          onClose()
 
-        dispatch(loginAction(res?.data!))
+          localStorage.setItem('token', res.data?.token!)
 
-        Toast({ type: 'success', message: 'Correcto' })
+          dispatch(loginAction(res?.data!))
 
-        if (res?.data?.rol === 'admin') {
-          router.push('/admin')
+          Toast({ type: 'success', message: 'Correcto' })
+
+          if (res?.data?.rol === 'admin') {
+            router.push('/admin')
+          }
         }
-      }
-      Toast({ type: 'error', message: res.error! })
-    })
+        Toast({ type: 'error', message: res.error! })
+      })
+    }
+
+    if (type('register')) {
+      register({ ...resValues }).then((res) => {
+        if (res.ok) {
+          Toast({ type: 'success', message: 'Correcto' })
+          setField('type', 'login')
+        }
+        Toast({ type: 'error', message: res.error! })
+      })
+    }
+
+    if (type('recovery')) {
+      recoveryPassword({ email: values.email }).then((res) => {
+        if (res.ok) {
+          Toast({ type: 'success', message: 'Correcto' })
+          setField('type', 'login')
+        }
+        Toast({ type: 'error', message: res.error! })
+      })
+    }
   }
 
   const type = useCallback(
@@ -61,9 +86,9 @@ const ModalLogin = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void 
         </h1>
         {type('register') && (
           <>
-            <Input type="text" label="Nombres" {...form.inputProps('nombres')} />
+            <Input type="text" label="name" {...form.inputProps('name')} />
 
-            <Input type="text" label="Apellidos" {...form.inputProps('apellidos')} />
+            <Input type="text" label="lastname" {...form.inputProps('lastname')} />
           </>
         )}
 
@@ -72,7 +97,10 @@ const ModalLogin = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void 
         {type('login') || type('register') ? (
           <Input type="password" label="Password" {...form.inputProps('password')} />
         ) : null}
-        <button type="submit" className="btn btn-solid-primary" disabled={loading}>
+        <button
+          type="submit"
+          className="btn btn-solid-primary"
+          disabled={loading || loadingRegister || loadingRecoveryPassword}>
           {type('login')
             ? 'Iniciar sesión'
             : type('register')
@@ -80,6 +108,8 @@ const ModalLogin = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void 
             : 'Recuperar Contraseña'}
 
           {loading && <Spinner className="w-5 h-5" />}
+          {loadingRegister && <Spinner className="w-5 h-5" />}
+          {loadingRecoveryPassword && <Spinner className="w-5 h-5" />}
         </button>
 
         <p className="">

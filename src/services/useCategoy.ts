@@ -1,4 +1,6 @@
 import {
+  CategoryProductCreateInput,
+  CategoryProductUpdateInput,
   useCreateCategoryMutation,
   useDeleteCategoryMutation,
   useGetAllCategorysQuery,
@@ -11,17 +13,6 @@ interface IProps {
   page?: number
   numberPage?: number
   id?: number
-}
-interface ICreateCategory {
-  image: any
-  name: string
-  description: string
-}
-interface IUpdateCategory {
-  description: string
-  id: number
-  image: any
-  name: string
 }
 
 // Obtenemos todas las categorias
@@ -50,7 +41,7 @@ export const useCategoy = ({ page = 1, numberPage = 10, id = 0 }: IProps) => {
 
   const [CreateCategory, { loading: loadingCreate }] = useCreateCategoryMutation()
 
-  const createCategory = async ({ image, name, description }: ICreateCategory) => {
+  const createCategory = async ({ image, name, description }: CategoryProductCreateInput) => {
     try {
       const res = await CreateCategory({
         variables: {
@@ -88,7 +79,7 @@ export const useCategoy = ({ page = 1, numberPage = 10, id = 0 }: IProps) => {
 
   const [UpdateCategory, { loading: loadingUpdate }] = useUpdateCategoryMutation()
 
-  const updateCategory = async ({ image, name, description, id }: IUpdateCategory) => {
+  const updateCategory = async ({ image, name, description, id }: CategoryProductUpdateInput) => {
     try {
       const res = await UpdateCategory({
         variables: {

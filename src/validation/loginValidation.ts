@@ -5,11 +5,11 @@ export interface Login {
   email: string
   password: string
   type: string
-  nombres: string
-  apellidos: string
+  name: string
+  lastname: string
 }
 
-export const loginValidation = ({ email, password, type, apellidos, nombres }: Login) => {
+export const loginValidation = ({ email, password, type, lastname, name }: Login) => {
   const errors: FormError<Login> = {}
 
   const isLogin = type === 'login'
@@ -17,11 +17,11 @@ export const loginValidation = ({ email, password, type, apellidos, nombres }: L
   const isRecovery = type === 'recovery'
 
   if (isRegister) {
-    if (isEmpty(nombres)) {
-      errors.nombres = 'El campo es requerido'
+    if (isEmpty(name)) {
+      errors.name = 'El campo es requerido'
     }
-    if (isEmpty(apellidos)) {
-      errors.apellidos = 'El campo es requerido'
+    if (isEmpty(lastname)) {
+      errors.lastname = 'El campo es requerido'
     }
   }
 

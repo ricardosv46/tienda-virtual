@@ -1,0 +1,20 @@
+query GetAllUsers($numberPage: Float!, $page: Float!) {
+  getAllUsers(numberPage: $numberPage, page: $page) {
+    data {
+      id
+      name
+      lastname
+      username
+      email
+      dni
+      celular
+      gender
+      password
+      image
+      condition
+      token
+      rol
+    }
+    total
+  }
+}

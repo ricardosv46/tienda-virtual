@@ -7,6 +7,7 @@ interface Props extends InputHTMLAttributes<HTMLInputElement> {
   error?: string
   rightElement?: ReactElement
   icon?: (props: SVGProps<SVGSVGElement>) => ReactElement
+  ref?: any
 }
 
 const Input = ({ label, icon: Icon, rightElement, ...props }: Props) => {
@@ -29,6 +30,7 @@ const Input = ({ label, icon: Icon, rightElement, ...props }: Props) => {
         <input
           {...props}
           id={`input-${uid}`}
+          ref={props.ref}
           value={value}
           autoComplete="new-password"
           onBlur={props?.onBlur}

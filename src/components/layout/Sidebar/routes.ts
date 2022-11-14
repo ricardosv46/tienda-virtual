@@ -1,5 +1,7 @@
+import { IconUser } from '@icons'
 import { SidebarLinkType } from '@interface/index'
 import { IoOptionsSharp } from 'react-icons/io5'
+import { MdShoppingCart } from 'react-icons/md'
 
 export const homeRoutes: SidebarLinkType[] = [
   {
@@ -22,6 +24,24 @@ export const homeRoutes: SidebarLinkType[] = [
           render: false
         }
       ]
+    }
+  },
+  {
+    icon: MdShoppingCart,
+    name: 'Productos',
+    to: '/admin/product',
+    subMenu: {
+      value: false,
+      paths: []
+    }
+  },
+  {
+    icon: IconUser,
+    name: 'Users',
+    to: '/admin/user',
+    subMenu: {
+      value: false,
+      paths: []
     }
   }
 ]

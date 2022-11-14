@@ -7,22 +7,13 @@ import Table from '@components/shared/Table/Table'
 import { ToggleSwitch } from '@components/shared/ToggleSwitch/ToggleSwitch'
 import useToggle from '@hooks/useToggle'
 import { IconEdit, IconTrash } from '@icons'
-import { useCategoy } from '@services/useCategoy'
-import Link from 'next/link'
+import { useUser } from '@services/useUser'
 import { useRouter } from 'next/router'
 import React, { useState } from 'react'
-import { FaPlus } from 'react-icons/fa'
 import { Toast } from 'src/utils/Toast'
 
-const Category = () => {
-  const {
-    dataAllCategory,
-    loading,
-    deleteCategory,
-    loadingDelete,
-    updateCategoryCondition,
-    loadingUpdateCondition
-  } = useCategoy({
+const User = () => {
+  const { dataAllUser, loading, deleteUser, loadingDelete } = useUser({
     page: 1,
     numberPage: 10
   })
@@ -31,7 +22,7 @@ const Category = () => {
   const [selectId, setSelectId] = useState<number | null>(null)
 
   const handleDelete = () => {
-    deleteCategory({ id: selectId! }).then((res) => {
+    deleteUser({ id: selectId! }).then((res) => {
       if (res.ok) {
         Toast({ type: 'success', message: 'Eliminado correctamente' })
       } else {
@@ -40,28 +31,8 @@ const Category = () => {
     })
   }
 
-  const handleUpdateCondition = ({ id, condition }: { id: number; condition: boolean }) => {
-    updateCategoryCondition({ id, condition }).then((res) => {
-      if (res.ok) {
-        Toast({ type: 'success', message: 'Actualizado correctamente' })
-      } else {
-        Toast({ type: 'error', message: res?.error })
-      }
-    })
-  }
-
   return (
-    <PlantillaAdmin
-      title="Categoría Productos"
-      desc="Desde aqui podras visualizar todas las categorías de los productos"
-      button={
-        <Link href="category/create">
-          <button type="button" className="self-end w-full mb-3 btn btn-solid-primary sm:w-max">
-            <FaPlus />
-            Crear Categoría
-          </button>
-        </Link>
-      }>
+    <PlantillaAdmin title="Usuarios" desc="Desde aqui podras visualizar todos los usuarios">
       <Show
         condition={loading}
         loading
@@ -70,14 +41,18 @@ const Category = () => {
           <thead>
             <tr className="dark:border-b-slate-700">
               <th className="text-center">Imagen</th>
-              <th className="text-center">Titulo</th>
-              <th className="text-center">Descripción</th>
-              <th className="text-center">Estado</th>
+              <th className="text-center">Nombre</th>
+              <th className="text-center">Apellido</th>
+              <th className="text-center">Usuario</th>
+              <th className="text-center">Email</th>
+              <th className="text-center">DNI</th>
+              <th className="text-center">Celular</th>
+              <th className="text-center">Genero</th>
               <th className="text-center">Acciones</th>
             </tr>
           </thead>
           <tbody>
-            {dataAllCategory?.map((item) => (
+            {dataAllUser?.map((item) => (
               <tr
                 key={item.id}
                 className="dark:bg-transparent dark:text-slate-50 dark:hover:bg-slate-900 dark:border-b-slate-700">
@@ -85,28 +60,14 @@ const Category = () => {
                   <Image className="object-cover w-12 mx-auto" src={item?.image} alt="imgs" />
                 </td>
                 <td className="text-center ">{item?.name}</td>
-
-                <td className="text-center ">{item?.description}</td>
-
-                <td>
-                  <div className="flex justify-center ">
-                    <ToggleSwitch
-                      onClick={() => {
-                        handleUpdateCondition({ id: item?.id, condition: !item?.condition })
-                      }}
-                      value={item?.condition}
-                    />
-                  </div>
-                </td>
-
+                <td className="text-center ">{item?.lastname}</td>
+                <td className="text-center ">{item?.username}</td>
+                <td className="text-center ">{item?.email}</td>
+                <td className="text-center ">{item?.dni}</td>
+                <td className="text-center ">{item?.celular}</td>
+                <td className="text-center ">{item?.gender}</td>
                 <td>
                   <div className="flex justify-center gap-x-3">
-                    <button
-                      className="btn-icon btn-ghost-primary"
-                      onClick={() => router.push(`category/${item?.id}`)}>
-                      <IconEdit />
-                    </button>
-
                     <button
                       className="btn-icon btn-ghost-primary"
                       disabled={loadingDelete}
@@ -122,8 +83,8 @@ const Category = () => {
                     isOpen={isOpen}
                     onClick={handleDelete}
                     onClose={onClose}
-                    header="Eliminar categoría"
-                    body="¿Estas seguro que deseas eliminar esta categoría?"
+                    header="Eliminar usuario"
+                    body="¿Estas seguro que deseas eliminar este usuario?"
                   />
                 </td>
               </tr>
@@ -135,4 +96,4 @@ const Category = () => {
   )
 }
 
-export default Category
+export default User
