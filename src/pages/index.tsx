@@ -10,7 +10,6 @@ const Home: NextPage = () => {
         <Input type="text" label="Username" className="w-full" error="El usuario es requerido" />
         <Input type="password" label="Password" className="w-full" />
         <Select
-          className="w-full"
           label="Password"
           options={[
             { value: 'values1', label: 'label1' },
